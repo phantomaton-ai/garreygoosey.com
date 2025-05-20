@@ -5,6 +5,7 @@ import yaml from 'js-yaml';
 const datesFile = 'comics/dates.yaml';
 const comicsDir = 'comics';
 const builtDir = 'built';
+const builtComicsDir = path.join(builtDir, comicsDir); // Target directory for comic images
 const styleFileName = 'style.css'; // Filename for the CSS file in built
 
 const styleContent = `
@@ -237,6 +238,25 @@ async function readComic(comicDir) {
   return { panels };
 }
 
+async function copyComicImages(srcDir, destDir) {
+    try {
+        await fs.mkdir(destDir, { recursive: true }); // Ensure target comic directory exists
+        const files = await fs.readdir(srcDir);
+        for (const file of files) {
+            if (path.extname(file).toLowerCase() === '.png') {
+                const srcPath = path.join(srcDir, file);
+                const destPath = path.join(destDir, file);
+                await fs.copyFile(srcPath, destPath);
+                console.log(`Copied image: ${file}`);
+            }
+        }
+    } catch (e) {
+        console.error(`Error copying images from ${srcDir} to ${destDir}:`, e);
+        throw e; // Re-throw to potentially halt build for this comic
+    }
+}
+
+
 function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
     // Path adjustment: Images are in ../comics/comic-name/ from built/date.html
     const comicDirName = datesMap[currentDate];
@@ -313,12 +333,17 @@ async function build() {
     for (let i = 0; i < sortedDates.length; i++) {
       const date = sortedDates[i];
       const comicName = dates[date];
-      const comicDir = path.join(comicsDir, comicName);
+      const comicSrcDir = path.join(comicsDir, comicName);
+      const comicDestDir = path.join(builtComicsDir, comicName); // Target directory for this comic's images
 
       try {
-        // Read the comic data
-        const comicData = await readComic(comicDir);
-        console.log(`Read comic data for ${comicName} (${date})`); // Log less detail here
+        // Copy image files for this comic
+        await copyComicImages(comicSrcDir, comicDestDir);
+        console.log(`Copied images for ${comicName} to ${comicDestDir}`);
+
+        // Read the comic data (markdown)
+        const comicData = await readComic(comicSrcDir);
+        console.log(`Read comic data for ${comicName} (${date})`);
 
         // Get navigation dates
         const prevDate = i > 0 ? sortedDates[i - 1] : null;
@@ -331,7 +356,6 @@ async function build() {
         await fs.writeFile(path.join(builtDir, `${date}.html`), htmlContent, 'utf8');
         console.log(`Generated and wrote built/${date}.html`);
 
-        // TODO: Copy image files for this comic to built/comics/comicName/
 
       } catch (e) {
         console.error(`Error processing comic ${comicName} for date ${date}:`, e);
