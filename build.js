@@ -111,6 +111,7 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
     </header>
     <main>
         <section class="comic-container">
+            ${comicData.title ? `<h2 class="comic-title">${comicData.title}</h2>` : ''} <!-- Add Comic Title Here -->
             <div class="comic-panels">
                 ${comicData.panels.map((panel, index) => `
                 <div class="panel">
@@ -180,6 +181,7 @@ async function build() {
         // Read the comic data (markdown)
         const comicData = await readComic(comicSrcDir);
         console.log(`Read comic data for ${comicName} (${date})`);
+        console.log(`Comic Title: "${comicData.title}"`); // Log the extracted title
 
         // Get navigation dates
         const prevDate = i > 0 ? sortedDates[i - 1] : null;
@@ -208,7 +210,22 @@ async function build() {
     <meta http-equiv="refresh" content="0; URL=/${latestDate}.html" />
     <title>Garrey Goosey Comics</title>
     <link rel="stylesheet" href="${styleFileName}"> <!-- Link stylesheet for index too -->
-    <style>body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--color-beige); color: var(--color-dark-brown); font-family: sans-serif; }</style>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: var(--color-beige);
+        color: var(--color-dark-brown);
+        font-family: 'Chocolate Classical Sans', sans-serif; /* Use the main font */
+        padding: 20px; /* Ensure padding is still applied */
+        text-align: center; /* Center redirect text */
+      }
+      p { margin: 0; } /* Remove default paragraph margin */
+      a { color: var(--color-dark-brown); text-decoration: underline; } /* Style link */
+      a:hover { color: var(--color-brown); } /* Hover effect */
+    </style>
 </head>
 <body>
     <p>Redirecting to the latest comic... <a href="/${latestDate}.html">Click here if you are not redirected</a>.</p>
