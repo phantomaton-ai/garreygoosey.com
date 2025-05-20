@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chocolate+Classical+Sans&family=Faculty+Glyphic&display=swap');
+
 :root {
     --color-beige: #F5F5DC; /* A classic beige */
     --color-brown: #A0522D; /* A reddish-brown */
@@ -7,7 +9,7 @@
 }
 
 body {
-    font-family: sans-serif; /* Simple font for simple minds */
+    font-family: 'Chocolate Classical Sans', sans-serif; /* New font */
     line-height: 1.6;
     margin: 0;
     padding: 20px;
@@ -24,6 +26,7 @@ header {
 }
 
 header h1 {
+    font-family: 'Cherry Bomb One', cursive; /* New font */
     color: var(--color-brown);
     font-size: 2.5em;
     margin: 0;
@@ -46,6 +49,17 @@ main {
     padding: 10px;
     background-color: var(--color-beige); /* Nested beige inside main */
 }
+
+/* Style for comic title */
+.comic-title {
+    font-family: 'Faculty Glyphic', cursive; /* New font */
+    text-align: center;
+    color: var(--color-dark-brown);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8em; /* Make the comic title slightly larger */
+}
+
 
 .comic-panels {
     display: flex; /* Arrange panels side-by-side */
@@ -71,6 +85,7 @@ main {
 }
 
 .caption {
+    font-family: 'Faculty Glyphic', cursive; /* New font */
     font-style: italic; /* As per garreygoosey.md */
     margin: 0;
     padding: 0 5px; /* Add some padding */
