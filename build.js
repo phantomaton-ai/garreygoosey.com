@@ -213,29 +213,43 @@ async function readComic(comicDir) {
                                  .map(line => line.trim())
                                  .filter(line => line !== '');
 
-  const panels = [];
-  // Process lines in pairs: caption followed by image markdown
-  for (let i = 0; i < nonEmptyLines.length; i += 2) {
-    const caption = nonEmptyLines[i];
-    const imageMarkdown = nonEmptyLines[i + 1]; // Assumes pairs exist
+  if (nonEmptyLines.length === 0) {
+      console.warn(`Comic markdown file is empty: ${mdFile}`);
+      return { title: '', panels: [] };
+  }
 
-    if (!caption || !imageMarkdown) {
-       console.warn(`Unexpected format in ${mdFile}. Expected caption then image markdown, found incomplete pair starting with: "${caption}".`);
-       // Decide how to handle incomplete pairs - for now, skip or add partial? Let's skip.
-       break;
-    }
+  // The first line is the title (assuming it starts with #)
+  const titleLine = nonEmptyLines[0];
+  const title = titleLine.startsWith('#') ? titleLine.substring(1).trim() : titleLine.trim();
+
+  const panels = [];
+  // Process remaining lines in pairs: caption followed by image markdown
+  // Start from the second line (index 1) and process in steps of 2
+  const panelLines = nonEmptyLines.slice(1);
+  for (let i = 0; i < panelLines.length - 1; i += 2) { // Loop up to the second-to-last line to ensure pair
+    const caption = panelLines[i];
+    const imageMarkdown = panelLines[i + 1];
 
     const match = imageMarkdown.match(/\!\[.*?\]\((.*?)\)/);
     if (match && match[1]) {
       const imagePath = match[1]; // This is the filename like 'dining-1.png'
       panels.push({ caption, imagePath });
     } else {
-      console.warn(`Could not parse image path from markdown line: "${imageMarkdown}" in ${mdFile}`);
-       // Add panel with caption but null image if parsing fails? Let's add the caption only.
-       panels.push({ caption, imagePath: null });
+      console.warn(`Could not parse image path from markdown line: "${imageMarkdown}" in ${mdFile}. Associated caption: "${caption}"`);
+      // Add panel with caption but null image if parsing fails? Yes, safer than skipping the caption.
+      panels.push({ caption, imagePath: null });
     }
   }
-  return { panels };
+
+   // Check for leftover lines that didn't form a pair (e.g., a final caption without an image)
+   if (panelLines.length % 2 !== 0) {
+       const leftoverLine = panelLines[panelLines.length - 1];
+       console.warn(`Found a leftover line in ${mdFile} that did not form a caption/image pair: "${leftoverLine}"`);
+       // Decide how to handle this - maybe add it as a final caption? For now, we'll just warn and ignore.
+   }
+
+
+  return { title, panels };
 }
 
 async function copyComicImages(srcDir, destDir) {
@@ -243,7 +257,8 @@ async function copyComicImages(srcDir, destDir) {
         await fs.mkdir(destDir, { recursive: true }); // Ensure target comic directory exists
         const files = await fs.readdir(srcDir);
         for (const file of files) {
-            if (path.extname(file).toLowerCase() === '.png') {
+            // Only copy image files (based on common extensions)
+            if (['.png', '.jpg', '.jpeg', '.gif', '.webp'].includes(path.extname(file).toLowerCase())) {
                 const srcPath = path.join(srcDir, file);
                 const destPath = path.join(destDir, file);
                 await fs.copyFile(srcPath, destPath);
@@ -285,7 +300,7 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
             <div class="comic-panels">
                 ${comicData.panels.map((panel, index) => `
                 <div class="panel">
-                    ${panel.imagePath ? `<img src="${imagePrefix}${panel.imagePath}" alt="Panel ${index + 1}">` : '<p>Image missing</p>'}
+                    ${panel.imagePath ? `<img src="${imagePrefix}${panel.imagePath}" alt="${panel.caption}">` : '<p>Image missing</p>'}
                     <p class="caption">${panel.caption}</p>
                 </div>
                 `).join('')}
@@ -323,6 +338,10 @@ async function build() {
     // Ensure built directory exists
     await fs.mkdir(builtDir, { recursive: true });
     console.log(`Ensured ${builtDir} exists.`);
+     // Ensure built comics directory exists
+    await fs.mkdir(builtComicsDir, { recursive: true });
+    console.log(`Ensured ${builtComicsDir} exists.`);
+
 
     // Write the main stylesheet *after* builtDir is ensured
     await fs.writeFile(path.join(builtDir, styleFileName), styleContent, 'utf8');
