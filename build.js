@@ -227,8 +227,8 @@ async function readComic(comicDir) {
   // Start from the second line (index 1) and process in steps of 2
   const panelLines = nonEmptyLines.slice(1);
   for (let i = 0; i < panelLines.length - 1; i += 2) { // Loop up to the second-to-last line to ensure pair
-    const caption = panelLines[i];
-    const imageMarkdown = panelLines[i + 1];
+    const caption = panelLines[i + 1];
+    const imageMarkdown = panelLines[i];
 
     const match = imageMarkdown.match(/\!\[.*?\]\((.*?)\)/);
     if (match && match[1]) {
