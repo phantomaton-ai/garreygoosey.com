@@ -5,7 +5,197 @@ import yaml from 'js-yaml';
 const datesFile = 'comics/dates.yaml';
 const comicsDir = 'comics';
 const builtDir = 'built';
-const styleFile = 'style.css'; // Path for the CSS file in built
+const styleFileName = 'style.css'; // Filename for the CSS file in built
+
+const styleContent = `
+:root {
+    --color-beige: #F5F5DC; /* A classic beige */
+    --color-brown: #A0522D; /* A reddish-brown */
+    --color-dark-brown: #5A2D1A; /* A darker brown for text */
+    --color-light-brown: #CD853F; /* A lighter brown for links */
+}
+
+body {
+    font-family: sans-serif; /* Simple font for simple minds */
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--color-beige);
+    color: var(--color-dark-brown); /* Default text color */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--color-brown);
+    font-size: 2.5em;
+    margin: 0;
+}
+
+main {
+    max-width: 800px; /* Keep content contained */
+    margin: 0 auto; /* Center the content */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white background for main content */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.comic-container {
+    margin-bottom: 30px;
+    border: 2px solid var(--color-brown);
+    padding: 10px;
+    background-color: var(--color-beige); /* Nested beige inside main */
+}
+
+.comic-panels {
+    display: flex; /* Arrange panels side-by-side */
+    gap: 10px; /* Space between panels */
+    justify-content: center; /* Center the panels if they don't fill the width */
+    flex-wrap: wrap; /* Allow panels to wrap on smaller screens */
+}
+
+.panel {
+    flex: 1; /* Allow panels to grow/shrink */
+    min-width: 200px; /* Minimum width before wrapping */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center image and caption */
+    text-align: center;
+}
+
+.panel img {
+    max-width: 95%; /* Make images slightly smaller than their container */
+    height: auto;
+    border: 1px solid var(--color-light-brown); /* Subtle border around images */
+    margin-bottom: 10px;
+}
+
+.caption {
+    font-style: italic; /* As per garreygoosey.md */
+    margin: 0;
+    padding: 0 5px; /* Add some padding */
+    color: var(--color-dark-brown);
+}
+
+.date {
+    text-align: right;
+    font-size: 0.9em;
+    color: var(--color-dark-brown);
+    margin-top: 15px;
+}
+
+.comic-navigation {
+    display: flex;
+    justify-content: space-between; /* Put Previous and Next on opposite ends */
+    margin-bottom: 20px;
+}
+
+.comic-navigation a,
+.comic-navigation span {
+    padding: 10px 15px;
+    border: 1px solid var(--color-brown);
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--color-dark-brown);
+    background-color: var(--color-light-brown);
+    transition: background-color 0.3s ease;
+}
+
+.comic-navigation a:hover {
+    background-color: var(--color-brown);
+    color: var(--color-beige);
+}
+
+.comic-navigation span.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc; /* A neutral grey for disabled */
+    border-color: #bbb;
+}
+
+.comic-calendar details {
+    border: 1px solid var(--color-brown);
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--color-light-brown);
+}
+
+.comic-calendar summary {
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--color-dark-brown);
+}
+
+.comic-calendar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap; /* Allow dates to wrap */
+    gap: 5px; /* Space between date links */
+}
+
+.comic-calendar li {
+    display: inline; /* Display list items inline */
+}
+
+.comic-calendar a {
+    text-decoration: none;
+    color: var(--color-dark-brown);
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+
+.comic-calendar a:hover {
+    background-color: var(--color-beige);
+}
+
+
+/* Basic Mobile Adjustments */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    .comic-panels {
+        flex-direction: column; /* Stack panels vertically on small screens */
+        gap: 20px; /* More space when stacked */
+    }
+
+    .panel {
+        min-width: auto; /* Remove min-width constraint */
+        width: 100%; /* Take full width */
+    }
+
+    .panel img {
+         max-width: 100%; /* Allow full width usage if needed */
+    }
+
+    .comic-navigation {
+        flex-direction: column; /* Stack nav buttons */
+        gap: 10px;
+    }
+
+     .comic-navigation a,
+     .comic-navigation span {
+        text-align: center; /* Center the text in buttons */
+     }
+
+     .comic-calendar ul {
+        flex-direction: column; /* Stack date links too */
+     }
+}
+`;
+
 
 async function readComic(comicDir) {
   const mdFile = path.join(comicDir, `${path.basename(comicDir)}.md`);
@@ -64,7 +254,7 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Garrey Goosey - ${currentDate}</title>
-    <link rel="stylesheet" href="${styleFile}">
+    <link rel="stylesheet" href="${styleFileName}">
 </head>
 <body class="beige-brown">
     <header>
@@ -114,10 +304,9 @@ async function build() {
     await fs.mkdir(builtDir, { recursive: true });
     console.log(`Ensured ${builtDir} exists.`);
 
-    // Write the main stylesheet
-    // TODO: Style content goes here
-    // await fs.writeFile(path.join(builtDir, styleFile), styleContent, 'utf8');
-    // console.log(`Wrote ${styleFile}`);
+    // Write the main stylesheet *after* builtDir is ensured
+    await fs.writeFile(path.join(builtDir, styleFileName), styleContent, 'utf8');
+    console.log(`Wrote ${styleFileName} to ${builtDir}.`);
 
 
     // Process each comic according to the dates
@@ -141,6 +330,8 @@ async function build() {
         // Write HTML to builtDir/${date}.html
         await fs.writeFile(path.join(builtDir, `${date}.html`), htmlContent, 'utf8');
         console.log(`Generated and wrote built/${date}.html`);
+
+        // TODO: Copy image files for this comic to built/comics/comicName/
 
       } catch (e) {
         console.error(`Error processing comic ${comicName} for date ${date}:`, e);
