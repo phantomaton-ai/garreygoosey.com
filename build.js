@@ -7,196 +7,7 @@ const comicsDir = 'comics';
 const builtDir = 'built';
 const builtComicsDir = path.join(builtDir, comicsDir); // Target directory for comic images
 const styleFileName = 'style.css'; // Filename for the CSS file in built
-
-const styleContent = `
-:root {
-    --color-beige: #F5F5DC; /* A classic beige */
-    --color-brown: #A0522D; /* A reddish-brown */
-    --color-dark-brown: #5A2D1A; /* A darker brown for text */
-    --color-light-brown: #CD853F; /* A lighter brown for links */
-}
-
-body {
-    font-family: sans-serif; /* Simple font for simple minds */
-    line-height: 1.6;
-    margin: 0;
-    padding: 20px;
-    background-color: var(--color-beige);
-    color: var(--color-dark-brown); /* Default text color */
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-h1 {
-    color: var(--color-brown);
-    font-size: 2.5em;
-    margin: 0;
-}
-
-main {
-    max-width: 800px; /* Keep content contained */
-    margin: 0 auto; /* Center the content */
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.7); /* Slightly transparent white background for main content */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.comic-container {
-    margin-bottom: 30px;
-    border: 2px solid var(--color-brown);
-    padding: 10px;
-    background-color: var(--color-beige); /* Nested beige inside main */
-}
-
-.comic-panels {
-    display: flex; /* Arrange panels side-by-side */
-    gap: 10px; /* Space between panels */
-    justify-content: center; /* Center the panels if they don't fill the width */
-    flex-wrap: wrap; /* Allow panels to wrap on smaller screens */
-}
-
-.panel {
-    flex: 1; /* Allow panels to grow/shrink */
-    min-width: 200px; /* Minimum width before wrapping */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center image and caption */
-    text-align: center;
-}
-
-.panel img {
-    max-width: 95%; /* Make images slightly smaller than their container */
-    height: auto;
-    border: 1px solid var(--color-light-brown); /* Subtle border around images */
-    margin-bottom: 10px;
-}
-
-.caption {
-    font-style: italic; /* As per garreygoosey.md */
-    margin: 0;
-    padding: 0 5px; /* Add some padding */
-    color: var(--color-dark-brown);
-}
-
-.date {
-    text-align: right;
-    font-size: 0.9em;
-    color: var(--color-dark-brown);
-    margin-top: 15px;
-}
-
-.comic-navigation {
-    display: flex;
-    justify-content: space-between; /* Put Previous and Next on opposite ends */
-    margin-bottom: 20px;
-}
-
-.comic-navigation a,
-.comic-navigation span {
-    padding: 10px 15px;
-    border: 1px solid var(--color-brown);
-    border-radius: 5px;
-    text-decoration: none;
-    color: var(--color-dark-brown);
-    background-color: var(--color-light-brown);
-    transition: background-color 0.3s ease;
-}
-
-.comic-navigation a:hover {
-    background-color: var(--color-brown);
-    color: var(--color-beige);
-}
-
-.comic-navigation span.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #ccc; /* A neutral grey for disabled */
-    border-color: #bbb;
-}
-
-.comic-calendar details {
-    border: 1px solid var(--color-brown);
-    padding: 10px;
-    border-radius: 5px;
-    background-color: var(--color-light-brown);
-}
-
-.comic-calendar summary {
-    font-weight: bold;
-    cursor: pointer;
-    color: var(--color-dark-brown);
-}
-
-.comic-calendar ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap; /* Allow dates to wrap */
-    gap: 5px; /* Space between date links */
-}
-
-.comic-calendar li {
-    display: inline; /* Display list items inline */
-}
-
-.comic-calendar a {
-    text-decoration: none;
-    color: var(--color-dark-brown);
-    padding: 2px 5px;
-    border-radius: 3px;
-    transition: background-color 0.2s ease;
-}
-
-.comic-calendar a:hover {
-    background-color: var(--color-beige);
-}
-
-
-/* Basic Mobile Adjustments */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 2em;
-    }
-
-    .comic-panels {
-        flex-direction: column; /* Stack panels vertically on small screens */
-        gap: 20px; /* More space when stacked */
-    }
-
-    .panel {
-        min-width: auto; /* Remove min-width constraint */
-        width: 100%; /* Take full width */
-    }
-
-    .panel img {
-         max-width: 100%; /* Allow full width usage if needed */
-    }
-
-    .comic-navigation {
-        flex-direction: column; /* Stack nav buttons */
-        gap: 10px;
-    }
-
-     .comic-navigation a,
-     .comic-navigation span {
-        text-align: center; /* Center the text in buttons */
-     }
-
-     .comic-calendar ul {
-        flex-direction: column; /* Stack date links too */
-     }
-}
-`;
-
+const styleSourcePath = styleFileName; // Path to the source CSS file in the root
 
 async function readComic(comicDir) {
   const mdFile = path.join(comicDir, `${path.basename(comicDir)}.md`);
@@ -223,12 +34,14 @@ async function readComic(comicDir) {
   const title = titleLine.startsWith('#') ? titleLine.substring(1).trim() : titleLine.trim();
 
   const panels = [];
-  // Process remaining lines in pairs: caption followed by image markdown
+  // Process remaining lines in pairs: image markdown followed by caption
   // Start from the second line (index 1) and process in steps of 2
   const panelLines = nonEmptyLines.slice(1);
-  for (let i = 0; i < panelLines.length - 1; i += 2) { // Loop up to the second-to-last line to ensure pair
-    const caption = panelLines[i + 1];
-    const imageMarkdown = panelLines[i];
+  // Loop up to the second-to-last line to ensure pair (index i and i+1)
+  for (let i = 0; i < panelLines.length - 1; i += 2) {
+    const imageMarkdown = panelLines[i]; // Corrected order based on user feedback
+    const caption = panelLines[i + 1];   // Corrected order based on user feedback
+
 
     const match = imageMarkdown.match(/\!\[.*?\]\((.*?)\)/);
     if (match && match[1]) {
@@ -241,11 +54,11 @@ async function readComic(comicDir) {
     }
   }
 
-   // Check for leftover lines that didn't form a pair (e.g., a final caption without an image)
+   // Check for leftover lines that didn't form a pair (e.g., a final caption or image markdown)
    if (panelLines.length % 2 !== 0) {
        const leftoverLine = panelLines[panelLines.length - 1];
-       console.warn(`Found a leftover line in ${mdFile} that did not form a caption/image pair: "${leftoverLine}"`);
-       // Decide how to handle this - maybe add it as a final caption? For now, we'll just warn and ignore.
+       console.warn(`Found a leftover line in ${mdFile} that did not form an image/caption pair: "${leftoverLine}"`);
+       // Decide how to handle this - for now, we'll just warn and ignore.
    }
 
 
@@ -262,9 +75,10 @@ async function copyComicImages(srcDir, destDir) {
                 const srcPath = path.join(srcDir, file);
                 const destPath = path.join(destDir, file);
                 await fs.copyFile(srcPath, destPath);
-                console.log(`Copied image: ${file}`);
+                // console.log(`Copied image: ${file}`); // Less logging during loop
             }
         }
+        console.log(`Finished copying images from ${srcDir} to ${destDir}.`); // Log completion
     } catch (e) {
         console.error(`Error copying images from ${srcDir} to ${destDir}:`, e);
         throw e; // Re-throw to potentially halt build for this comic
@@ -318,6 +132,9 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
             </ul>
         </details>
     </main>
+    <footer>
+        <p>CC0 by <a href="https://phantomaton.com/" target="_blank">Phantomaton</a> | <a href="https://creativecommons.org/public-domain/cc0/" target="_blank">CC0 1.0 Universal (CC0 1.0) Public Domain Dedication</a></p>
+    </footer>
 </body>
 </html>`;
 
@@ -343,9 +160,9 @@ async function build() {
     console.log(`Ensured ${builtComicsDir} exists.`);
 
 
-    // Write the main stylesheet *after* builtDir is ensured
-    await fs.writeFile(path.join(builtDir, styleFileName), styleContent, 'utf8');
-    console.log(`Wrote ${styleFileName} to ${builtDir}.`);
+    // Copy the main stylesheet from root to built
+    await fs.copyFile(styleSourcePath, path.join(builtDir, styleFileName));
+    console.log(`Copied ${styleSourcePath} to ${builtDir}/${styleFileName}.`);
 
 
     // Process each comic according to the dates
@@ -358,7 +175,7 @@ async function build() {
       try {
         // Copy image files for this comic
         await copyComicImages(comicSrcDir, comicDestDir);
-        console.log(`Copied images for ${comicName} to ${comicDestDir}`);
+        // console.log(`Copied images for ${comicName} to ${comicDestDir}`); // Moved logging into copyComicImages
 
         // Read the comic data (markdown)
         const comicData = await readComic(comicSrcDir);
@@ -390,6 +207,8 @@ async function build() {
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; URL=/${latestDate}.html" />
     <title>Garrey Goosey Comics</title>
+    <link rel="stylesheet" href="${styleFileName}"> <!-- Link stylesheet for index too -->
+    <style>body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--color-beige); color: var(--color-dark-brown); font-family: sans-serif; }</style>
 </head>
 <body>
     <p>Redirecting to the latest comic... <a href="/${latestDate}.html">Click here if you are not redirected</a>.</p>
