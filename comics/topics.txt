@@ -2,4 +2,4 @@ dining
 carousel
 greenery
 groceries
-
+laundry
