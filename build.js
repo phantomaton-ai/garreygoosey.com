@@ -164,11 +164,9 @@ async function build() {
     await fs.mkdir(builtComicsDir, { recursive: true });
     console.log(`Ensured ${builtComicsDir} exists.`);
 
-
     // Copy the main stylesheet from root to built
     await fs.copyFile(styleSourcePath, path.join(builtDir, styleFileName));
     console.log(`Copied ${styleSourcePath} to ${builtDir}/${styleFileName}.`);
-
 
     // Process each comic according to the dates
     for (let i = 0; i < sortedDates.length; i++) {
@@ -197,7 +195,6 @@ async function build() {
         // Write HTML to builtDir/${date}.html
         await fs.writeFile(path.join(builtDir, `${date}.html`), htmlContent, 'utf8');
         console.log(`Generated and wrote built/${date}.html`);
-
 
       } catch (e) {
         console.error(`Error processing comic ${comicName} for date ${date}:`, e);
