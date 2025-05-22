@@ -6,7 +6,7 @@
 
 ![Garrey Goosey sits at a fine dining table, devouring a plate of steak and peas.](dining-2.png)
 
-*Chrunch some steak & peas.*
+Chrunch some steak & peas.
 
 ![Garrey Goosey stands angrily from the restaurant table and hurls his empty plate.](dining-3.png)
 

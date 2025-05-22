@@ -41,12 +41,12 @@ async function readComic(comicDir) {
   for (let i = 0; i < panelLines.length - 1; i += 2) {
     const imageMarkdown = panelLines[i]; // Corrected order based on user feedback
     const caption = panelLines[i + 1];   // Corrected order based on user feedback
-
+    const captionType = caption.startsWith('"') && caption.endsWith('"') ? 'quote' : 'narration';
 
     const match = imageMarkdown.match(/\!\[.*?\]\((.*?)\)/);
     if (match && match[1]) {
       const imagePath = match[1]; // This is the filename like 'dining-1.png'
-      panels.push({ caption, imagePath });
+      panels.push({ caption, captionType, imagePath });
     } else {
       console.warn(`Could not parse image path from markdown line: "${imageMarkdown}" in ${mdFile}. Associated caption: "${caption}"`);
       // Add panel with caption but null image if parsing fails? Yes, safer than skipping the caption.
@@ -116,7 +116,7 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
                 ${comicData.panels.map((panel, index) => `
                 <div class="panel">
                     ${panel.imagePath ? `<img src="${imagePrefix}${panel.imagePath}" alt="${panel.caption}">` : '<p>Image missing</p>'}
-                    <p class="caption">${panel.caption}</p>
+                    <p class="caption ${panel.captionType}">${panel.caption}</p>
                 </div>
                 `).join('')}
             </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chocolate+Classical+Sans&family=Faculty+Glyphic&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chocolate+Classical+Sans&family=Crimson+Text:ital,wght@0,700;1,600&family=Faculty+Glyphic&display=swap');
 
 :root {
     --color-beige: #F5F5DC; /* A classic beige */
@@ -85,11 +85,17 @@ main {
 }
 
 .caption {
-    font-family: 'Faculty Glyphic', cursive; /* New font */
+    font-family: "Crimson Text", serif;
     font-style: italic; /* As per garreygoosey.md */
+    font-weight: 600;
     margin: 0;
     padding: 0 5px; /* Add some padding */
     color: var(--color-dark-brown);
+}
+
+.caption.narration {
+    font-style: normal;
+    font-weight: 700;
 }
 
 .date {
