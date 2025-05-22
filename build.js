@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import yaml from 'js-yaml';
+import moment from 'moment';
 
-const datesFile = 'comics/dates.yaml';
+const topicsFile = 'comics/topics.txt';
 const comicsDir = 'comics';
 const builtDir = 'built';
 const builtComicsDir = path.join(builtDir, comicsDir); // Target directory for comic images
@@ -145,9 +145,13 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
 
 async function build() {
   try {
-    // Read the dates YAML
-    const datesYaml = await fs.readFile(datesFile, 'utf8');
-    const dates = yaml.load(datesYaml);
+    const topicsText = await fs.readFile(topicsFile, 'utf8');
+    const topics = topicsText.split('\n').filter(t => t);
+    const startDate = moment('20250519', 'YYYYMMDD');
+    const dates = topics.reduce((dates,t,i) => ({
+      ...dates,
+      [startDate.add(i, 'days').format('YYYYMMDD')]: t
+    }), {});
     const sortedDates = Object.keys(dates).sort(); // Get dates in chronological order
 
     console.log('Dates loaded:', dates);

@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "devDependencies": {
-    "js-yaml": "^4.1.0"
+  "dependencies": {
+    "moment": "^2.30.1"
   }
 }
