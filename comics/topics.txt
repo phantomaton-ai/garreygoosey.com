@@ -3,3 +3,4 @@ carousel
 greenery
 groceries
 laundry
+vending
