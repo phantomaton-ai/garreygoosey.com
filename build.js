@@ -150,7 +150,7 @@ async function build() {
     const startDate = moment('20250519', 'YYYYMMDD');
     const dates = topics.reduce((dates,t,i) => ({
       ...dates,
-      [startDate.add(i, 'days').format('YYYYMMDD')]: t
+      [startDate.clone().add(i, 'days').format('YYYYMMDD')]: t
     }), {});
     const sortedDates = Object.keys(dates).sort(); // Get dates in chronological order
 
