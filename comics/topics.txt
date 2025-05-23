@@ -4,3 +4,4 @@ greenery
 groceries
 laundry
 vending
+vacuum
