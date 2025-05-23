@@ -6,4 +6,4 @@ laundry
 vending
 vacuum
 cooking
-dishwashing
+dishes
