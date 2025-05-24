@@ -10,4 +10,4 @@ Starts a paper draw.
 
 ![Garrey Goosey tears up the paper or throws the pen down in anger.](drawing-3.png)
 
-"O kablooney"
+"Boo gholly"

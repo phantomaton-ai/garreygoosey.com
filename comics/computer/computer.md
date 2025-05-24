@@ -10,4 +10,4 @@ Boot up a machine.
 
 ![Garrey Goosey is tangled in computer wires, looking angry.](computer-3.png)
 
-"O kablooney!"
+"Boo golly."
