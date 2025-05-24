@@ -1,4 +1,4 @@
-# Gardening Hassle
+# Garden Burden
 
 ![Garrey Goosey kneels in a patch of dirt with a small trowel and a bag of seeds.](gardening-1.png)
 
