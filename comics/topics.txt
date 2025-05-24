@@ -8,4 +8,10 @@ vacuum
 cooking
 dishes
 mail
-
+mirror
+computer
+writing
+fishing
+drawing
+reading
+gardening
