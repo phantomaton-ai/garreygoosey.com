@@ -10,4 +10,4 @@ It is mirorr.
 
 ![Garrey Goosey shatters the mirror in anger.](mirror-3.png)
 
-"O kablooney!"
+"O kablooney"
