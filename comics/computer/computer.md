@@ -1,4 +1,4 @@
-# Computer Hassle
+# Computer Problem
 
 ![Garrey Goosey sits at a computer looking ready to work.](computer-1.png)
 
