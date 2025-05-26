@@ -17,3 +17,5 @@ reading
 gardening
 blocks
 broom
+painting
+aquarium
