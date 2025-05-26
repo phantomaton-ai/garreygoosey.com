@@ -19,3 +19,4 @@ blocks
 broom
 painting
 aquarium
+stapler
