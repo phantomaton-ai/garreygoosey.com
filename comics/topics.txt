@@ -15,3 +15,4 @@ fishing
 drawing
 reading
 gardening
+blocks
