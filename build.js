@@ -146,7 +146,7 @@ function generateComicHtml(currentDate, comicData, nav, allDates, datesMap) {
 async function build() {
   try {
     const topicsText = await fs.readFile(topicsFile, 'utf8');
-    const topics = topicsText.split('\n').filter(t => t);
+    const topics = topicsText.split('\n').map(t => t.trim()).filter(t => /^[a-z]+$/.test(t));
     const startDate = moment('20250519', 'YYYYMMDD');
     const dates = topics.reduce((dates,t,i) => ({
       ...dates,

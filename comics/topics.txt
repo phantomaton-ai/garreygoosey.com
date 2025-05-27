@@ -20,3 +20,13 @@ broom
 painting
 aquarium
 stapler
+remote
+key
+camera
+button
+
+# string
+# cards
+# scissors
+# umbrella
+# walking
