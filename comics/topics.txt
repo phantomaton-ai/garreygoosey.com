@@ -30,3 +30,4 @@ scissors
 umbrella
 walking
 soup
+hat
