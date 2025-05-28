@@ -8,6 +8,6 @@
 
 Paper rips & tears.
 
-![Garrey Goosey angrily throws the scissors away or tears the paper into pieces.](scissors-3.png)
+![Garrey Goosey angrily throws the scissors away and tears the paper into pieces.](scissors-3.png)
 
 "O kablooney!"
