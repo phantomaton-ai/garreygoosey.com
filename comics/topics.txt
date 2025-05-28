@@ -31,3 +31,4 @@ umbrella
 walking
 soup
 hat
+shoe
