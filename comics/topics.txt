@@ -24,9 +24,8 @@ remote
 key
 camera
 button
-
-# string
-# cards
-# scissors
-# umbrella
-# walking
+string
+cards
+scissors
+umbrella
+walking
