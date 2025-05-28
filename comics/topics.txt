@@ -29,3 +29,4 @@ cards
 scissors
 umbrella
 walking
+soup
