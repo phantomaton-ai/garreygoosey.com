@@ -32,3 +32,4 @@ walking
 soup
 hat
 shoe
+phone
