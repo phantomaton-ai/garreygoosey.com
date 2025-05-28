@@ -1,4 +1,4 @@
-# Zipper Jam
+# Zipper Sticks
 
 ![Garrey Goosey holds a jacket, starting to zip.](zipper-1.png)
 
