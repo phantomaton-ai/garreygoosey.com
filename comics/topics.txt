@@ -38,3 +38,5 @@ ironing
 zipper
 tape
 jar
+wrapping
+box
