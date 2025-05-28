@@ -33,3 +33,4 @@ soup
 hat
 shoe
 phone
+assemble
