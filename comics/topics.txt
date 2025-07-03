@@ -42,3 +42,10 @@ wrapping
 box
 bulb
 glue
+tie
+pencil
+kite
+map
+hammer
+window
+hairbrush
