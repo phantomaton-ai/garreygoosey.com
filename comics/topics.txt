@@ -72,3 +72,10 @@ alarm
 bowling
 whistle
 printer
+fan
+stacking
+digging
+gaming
+toast
+lamp
+measuring
