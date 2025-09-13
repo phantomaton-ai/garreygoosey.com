@@ -2,12 +2,12 @@
 
 ![Garrey Goosey meticulously adjusts a telescope in a dark outdoor setting.](telescope-1.png)
 
-See big a stars.
+Look up a sky.
 
-![Garrey Goosey peers into the telescope, looking bewildered, seeing only a blurry, close-up image of a bird.](telescope-2.png)
+![Garrey Goosey peers into the telescope, looking bewildered.](telescope-2.png)
 
-"Bird so close!?"
+"All stars!?"
 
-![Garrey Goosey glares furiously at the telescope, which is now tangled in its tripod and pointing at the ground.](telescope-3.png)
+![Garrey Goosey furiously kicks the telescope away.](telescope-3.png)
 
-"O kablooney"
+"Drat scope!"
