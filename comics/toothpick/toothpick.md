@@ -1,4 +1,4 @@
-# Toothpick
+# Toothpick Ick
 
 ![Garrey Goosey holds a single toothpick, looking satisfied after a meal.](toothpick-1.png)
 
